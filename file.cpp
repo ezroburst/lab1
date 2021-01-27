@@ -66,7 +66,7 @@ void FileCheck:: add_subscriber()
 
         // можем добавить, вызываем сигрнал
         if (isAdd)
-            emit addSubscriber(name);
+             addSubscriber(name);
     }
 
     // выход
@@ -99,7 +99,7 @@ void FileCheck:: add_shop()
         // Если путь не пустой
         if (!path.isEmpty() && isAdd)
         {
-            emit addshop(path);
+             addshop(path);
             isAdd = true;
         }
     }
@@ -144,7 +144,7 @@ void FileCheck::connect()
             if (!subscribers[idSubscriber]->subscribe())
             {
                 // Вызываем сигнал связывания
-                emit connect(idshop, idSubscriber);
+                connect(idshop, idSubscriber);
                 isConnect = true;
             }
             // Если подписчик уже подписан, то говорим об этом
@@ -246,7 +246,7 @@ void FileCheck::delete_shop()
         if (idshop >= 0 && idshop < shops.size())
         {
             // Вызываем синал удаления журнала
-            emit deleteshop(idshop);
+             deleteshop(idshop);
 
             isDelete = true;
         }
@@ -275,7 +275,7 @@ void FileCheck::delete_subscriber()
         if (idSubscriber >= 0 && idSubscriber < subscribers.size())
         {
             // Вызываем сигнал удаления подписчика
-            emit deleteSubscriber(idSubscriber);
+            deleteSubscriber(idSubscriber);
 
             isDelete = true;
         }
@@ -303,7 +303,7 @@ void FileCheck::get_counter()
         if (idshop >= 0 && idshop < shops.size())
         {
             // Вызываем сигнал, который выведет число подписчиков у журнала
-            emit getCounter(idshop);
+             getCounter(idshop);
 
             isCounter = true;
         }
@@ -344,7 +344,7 @@ void FileCheck::resign()
             if (idshop >= 0 && idshop < shops.size())
             {
                 // Вызываем сигнал переподписки
-                emit resign(idSubscriber, idshop);
+                resign(idSubscriber, idshop);
 
                 isResign = true;
             }
@@ -358,7 +358,7 @@ void FileCheck::TERMINAL()
   //  QTextStream cin(&data);
 
 int a=0;
-    while(a=0)
+    while(a==0)
     {
        QString command;
        bool isCommand = false;
@@ -465,6 +465,167 @@ resign();
     }
 }
 
+void FileCheck::addshop(const QString& path)
+      {
+    if(path!="")
+    {
+          // Если журнал(путь) существует и он файл
+          if (QFileInfo(path).exists() && QFileInfo(path).isFile())
+          {
+              shops.push_back(new Shop(path));
+              QTextStream(stdout) << "\t\tshop " << path << " was added!" << endl;
+          }
+          else
+          {
+              QTextStream(stdout) << "\t\tPath to shop was not added!" << endl;
+          }
+      }
+}
+void FileCheck::connect(const qint32& idshop, const qint32& idSubscriber)
+    {if(idSubscriber!=0)
+    {
+        // Если выбранный подписчик не подписан, то выполняем
+        if (!subscribers[idSubscriber]->subscribe())
+        {
+            // Обращаемся к журналу, на который хотим подписаться и добавляем ему подписчика
+            shops[idshop]->addSubscriber(subscribers[idSubscriber]);
+            // Добавляем подписчику журнал
+            subscribers[idSubscriber]->getshop() = shops[idshop]->getName();
+
+            // Выставляем подписчику флаг, что он был подписан
+            subscribers[idSubscriber]->subscribe() = true;
+
+            QTextStream(stdout) << "\t\t" << shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
+        }
+        else
+        {
+            QTextStream(stdout) << "\t\tConnection error!" << endl;
+        }
+    }
+    }
+void FileCheck::addSubscriber(const QString& name)
+    {
+    if(name!="")
+    {
+        if (!name.isEmpty())
+        {
+            subscribers.push_back(new Subscriber(name));
+            QTextStream(stdout) << "\t\tSubscriber " << name << " was added!" << endl;
+        }
+        else
+        {
+            QTextStream(stdout) << "\t\tSubscriber was not added!" << endl;
+        }
+    }
+}
+void FileCheck::deleteshop(const qint32& index)
+    {
+        for (qint32 i = 0; i < shops.size(); ++i)
+        {
+            // Находим нужный индекс журнала, который надо удалить
+            if (i == index)
+            {
+                QTextStream(stdout) << "\t\t" <<shops[i]->getName() << " was deleted!" << endl;
+
+                // Проходимся по всем подписчикам, и удаляем у этих подписчиков этот журнал
+                for (const auto& subscriber : shops[i]->getSubscribers())
+                {
+                    subscriber->getshop().clear();
+                    subscriber->subscribe() = false;
+                }
+
+                // Удаляем журнал из вектора ( массива )
+                shops.remove(i);
+
+                break;
+            }
+        }
+    }
+void FileCheck::deleteSubscriber(const qint32& index)
+     {
+         for (qint32 i = 0; i < subscribers.size(); ++i)
+         {
+             // Ищем индекс нужного подписчика, которого надо удалить
+             if (i == index)
+             {
+                 QTextStream(stdout) << "\t\t" << subscribers[i]->getName() << " was deleted!" << endl;
+
+                 // Проходим по списку журналов
+                 for (qint32 iMag = 0; iMag < shops.size(); ++iMag)
+                 {
+                     // Ищем у каждого журнала нашего подписчика
+                     for (qint32 iSub = 0; iSub < shops[iMag]->getSubscribers().size(); ++iSub)
+                     {
+                         // Если мы нашли нашего подписчика у журнала, то выполняем
+                         if (subscribers[index]->getName() == shops[iMag]->getSubscribers()[iSub]->getName())
+                         {
+                             // Удаляем у журнала этого подписчика
+                             shops[iMag]->getSubscribers().remove(iSub);
+                             shops[iMag]->getCounter()--;
+                         }
+                     }
+                 }
+
+                 // Удаляем подписчика из вектора ( массива )
+                 subscribers.remove(i);
+
+                 break;
+             }
+         }
+     }
+void FileCheck::getCounter(const qint32& index)
+    {
+        for (qint32 i = 0; i < shops.size(); ++i)
+        {
+            // Находим нужный индекс магазина
+            if (i == index)
+            {
+                QTextStream(stdout) << "\t\tCounter " << shops[i]->getName() << " is equal " << shops[i]->getCounter() << endl;
+                break;
+            }
+        }
+    }
+void FileCheck::resign(const qint32& idSubscriber, const qint32& idshop)
+     {
+         for (qint32 i = 0; i < subscribers.size(); ++i)
+         {
+             // Находим ID подписчика, которого надо переподписать
+             if (i == idSubscriber)
+             {
+                 // Если подписчик ещё не подписан, то выполняем
+                 if (!subscribers[idSubscriber]->subscribe())
+                 {
+                     QTextStream(stdout) << "\t\tThe subscriber is not subscribed yet!" << endl;
+                 }
+                 else
+                 {
+                     // Проходим по всем журналам
+                     for (qint32 mag = 0; mag < shops.size(); ++mag)
+                     {
+                         // Если нашли нужный журнал, то удаляем из подписки этого подписчика
+                         if (shops[mag]->getName() == subscribers[idSubscriber]->getshop())
+                         {
+                             for (qint32 sub = 0; sub < shops[mag]->getSubscribers().size(); ++sub)
+                             {
+                                 if (shops[mag]->getSubscribers()[sub]->getName() == subscribers[idSubscriber]->getName())
+                                 {
+                                     shops[mag]->getSubscribers().remove(sub);
+                                     shops[mag]->getCounter()--;
+                                 }
+                             }
+                         }
+                     }
+
+                     // Здесь подписываем на новый журнал
+                     shops[idshop]->addSubscriber(subscribers[idSubscriber]);
+                     subscribers[idSubscriber]->getshop() = shops[idshop]->getName();
+                     subscribers[idSubscriber]->subscribe() = true;
+
+                     QTextStream(stdout) << "\t\t" << shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
+                 }
+             }
+         }
+     }
 FileCheck::FileCheck() :
     QObject(nullptr),
     com({
@@ -480,165 +641,29 @@ FileCheck::FileCheck() :
         })
 {
     // Связываем сигнал добавления журнала с лямбда-функцией
-    QObject::connect(this, &FileCheck::addshop, [&](const QString& path)
-        {
-            // Если журнал(путь) существует и он файл
-            if (QFileInfo(path).exists() && QFileInfo(path).isFile())
-            {
-                shops.push_back(new Shop(path));
-                QTextStream(stdout) << "\t\tshop " << path << " was added!" << endl;
-            }
-            else
-            {
-                QTextStream(stdout) << "\t\tPath to shop was not added!" << endl;
-            }
-        });
+    QString path;
+    addshop( path);
 
-    QObject::connect(this, &FileCheck::addSubscriber, [&](const QString& name)
-        {
-            if (!name.isEmpty())
-            {
-                subscribers.push_back(new Subscriber(name));
-                QTextStream(stdout) << "\t\tSubscriber " << name << " was added!" << endl;
-            }
-            else
-            {
-                QTextStream(stdout) << "\t\tSubscriber was not added!" << endl;
-            }
-        });
+const QString name;
+addSubscriber( name);
 
-    QObject::connect(this, &FileCheck::connect, [&](const qint32& idshop, const qint32& idSubscriber)
-        {
-            // Если выбранный подписчик не подписан, то выполняем
-            if (!subscribers[idSubscriber]->subscribe())
-            {
-                // Обращаемся к журналу, на который хотим подписаться и добавляем ему подписчика
-                shops[idshop]->addSubscriber(subscribers[idSubscriber]);
-                // Добавляем подписчику журнал
-                subscribers[idSubscriber]->getshop() = shops[idshop]->getName();
+const qint32& idshop=0;
+const qint32& idSubscriber=0;
+connect(idshop,idSubscriber);
 
-                // Выставляем подписчику флаг, что он был подписан
-                subscribers[idSubscriber]->subscribe() = true;
+const qint32& inde=0;
+deleteshop( inde);
 
-                QTextStream(stdout) << "\t\t" << shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
-            }
-            else
-            {
-                QTextStream(stdout) << "\t\tConnection error!" << endl;
-            }
-        });
+const qint32& index=0;
+deleteSubscriber( index);
 
-    QObject::connect(this, &FileCheck::deleteshop, [&](const qint32& index)
-        {
-            for (qint32 i = 0; i < shops.size(); ++i)
-            {
-                // Находим нужный индекс журнала, который надо удалить
-                if (i == index)
-                {
-                    QTextStream(stdout) << "\t\t" <<shops[i]->getName() << " was deleted!" << endl;
+const qint32& index1=0;
+getCounter(index1);
 
-                    // Проходимся по всем подписчикам, и удаляем у этих подписчиков этот журнал
-                    for (const auto& subscriber : shops[i]->getSubscribers())
-                    {
-                        subscriber->getshop().clear();
-                        subscriber->subscribe() = false;
-                    }
+const qint32& idSubscriber1=0;
+const qint32& idshop1=0;
+resign( idSubscriber1, idshop1);
 
-                    // Удаляем журнал из вектора ( массива )
-                    shops.remove(i);
-
-                    break;
-                }
-            }
-        });
-
-    QObject::connect(this, &FileCheck::deleteSubscriber, [&](const qint32& index)
-        {
-            for (qint32 i = 0; i < subscribers.size(); ++i)
-            {
-                // Ищем индекс нужного подписчика, которого надо удалить
-                if (i == index)
-                {
-                    QTextStream(stdout) << "\t\t" << subscribers[i]->getName() << " was deleted!" << endl;
-
-                    // Проходим по списку журналов
-                    for (qint32 iMag = 0; iMag < shops.size(); ++iMag)
-                    {
-                        // Ищем у каждого журнала нашего подписчика
-                        for (qint32 iSub = 0; iSub < shops[iMag]->getSubscribers().size(); ++iSub)
-                        {
-                            // Если мы нашли нашего подписчика у журнала, то выполняем
-                            if (subscribers[index]->getName() == shops[iMag]->getSubscribers()[iSub]->getName())
-                            {
-                                // Удаляем у журнала этого подписчика
-                                shops[iMag]->getSubscribers().remove(iSub);
-                                shops[iMag]->getCounter()--;
-                            }
-                        }
-                    }
-
-                    // Удаляем подписчика из вектора ( массива )
-                    subscribers.remove(i);
-
-                    break;
-                }
-            }
-        });
-
-    QObject::connect(this, &FileCheck::getCounter, [&](const qint32& index)
-        {
-            for (qint32 i = 0; i < shops.size(); ++i)
-            {
-                // Находим нужный индекс магазина
-                if (i == index)
-                {
-                    QTextStream(stdout) << "\t\tCounter " << shops[i]->getName() << " is equal " << shops[i]->getCounter() << endl;
-                    break;
-                }
-            }
-        });
-
-    QObject::connect(this, &FileCheck::resign, [&](const qint32& idSubscriber, const qint32& idshop)
-        {
-            for (qint32 i = 0; i < subscribers.size(); ++i)
-            {
-                // Находим ID подписчика, которого надо переподписать
-                if (i == idSubscriber)
-                {
-                    // Если подписчик ещё не подписан, то выполняем
-                    if (!subscribers[idSubscriber]->subscribe())
-                    {
-                        QTextStream(stdout) << "\t\tThe subscriber is not subscribed yet!" << endl;
-                    }
-                    else
-                    {
-                        // Проходим по всем журналам
-                        for (qint32 mag = 0; mag < shops.size(); ++mag)
-                        {
-                            // Если нашли нужный журнал, то удаляем из подписки этого подписчика
-                            if (shops[mag]->getName() == subscribers[idSubscriber]->getshop())
-                            {
-                                for (qint32 sub = 0; sub < shops[mag]->getSubscribers().size(); ++sub)
-                                {
-                                    if (shops[mag]->getSubscribers()[sub]->getName() == subscribers[idSubscriber]->getName())
-                                    {
-                                        shops[mag]->getSubscribers().remove(sub);
-                                        shops[mag]->getCounter()--;
-                                    }
-                                }
-                            }
-                        }
-
-                        // Здесь подписываем на новый журнал
-                        shops[idshop]->addSubscriber(subscribers[idSubscriber]);
-                        subscribers[idSubscriber]->getshop() = shops[idshop]->getName();
-                        subscribers[idSubscriber]->subscribe() = true;
-
-                        QTextStream(stdout) << "\t\t" << shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
-                    }
-                }
-            }
-        });
 
 }
 

@@ -25,26 +25,27 @@ void delete_shop();
 void delete_subscriber();
 void get_counter();
 void resign();
+
     // Сигнал добавления журнала
-    Q_SIGNAL void addshop(const QString& path);
+    void addshop(const QString& path);
 
     // Сигнал добавления подписчика
-    Q_SIGNAL void addSubscriber(const QString& name);
+     void addSubscriber(const QString& name);
 
     // Сигнал связывания журнала и подписчика
-    Q_SIGNAL void connect(const qint32& idshop, const qint32& idSubscriber);
+    void connect(const qint32& idshop, const qint32& idSubscriber);
 
     // Сигнал удаления журнала
-    Q_SIGNAL void deleteshop(const qint32& index);
+     void deleteshop(const qint32& index);
 
     // Сигнал удаления подписчика
-    Q_SIGNAL void deleteSubscriber(const qint32& index);
+    void deleteSubscriber(const qint32& index);
 
     // Сигнал, который вызывает функцию у журнала ( счётчик подписчиков )
-    Q_SIGNAL void getCounter(const qint32& index);
+     void getCounter(const qint32& index);
 
     // Сигнал переподписки подписчика
-    Q_SIGNAL void resign(const qint32& idSubscriber, const qint32& idshop);
+     void resign(const qint32& idSubscriber, const qint32& idshop);
 
     void TERMINAL();
 
