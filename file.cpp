@@ -40,41 +40,41 @@ void FileCheck::printSubscribers()
         QTextStream(stdout) << "\t" << i++ << "      " << subscriber->getName() << endl;
 }
  QTextStream cin(stdin), cout(stdout);
-void FileCheck:: add_subscriber()
-{
-    QString name;
-    bool isAdd = false;//флаг сдежит за разрешением на добавление
+//void FileCheck:: add_subscriber()
+//{
+//    QString name;
+//    bool isAdd = false;//флаг сдежит за разрешением на добавление
 
-    // Блок добавление подписчика
-    while (!isAdd)
-    {
-        cout << '\t' << "Input subscriber: " << flush;
-        name = cin.readLine();
-        isAdd = true;
+//    // Блок добавление подписчика
+//    while (!isAdd)
+//    {
+//        cout << '\t' << "Input subscriber: " << flush;
+//        name = cin.readLine();
+//        isAdd = true;
 
-        // цикл по всем существующим подписчикам
-        for (const auto& it : subscribers)
-        {
-            // Если такой подписчик уже существует, то нужно ввести другое имя
-            if (it->getName() == name)
-            {
-                cout << "\t" << name << " no!" << endl;
-                isAdd = false;
-                break;
-            }
-        }
+//        // цикл по всем существующим подписчикам
+//        for (const auto& it : subscribers)
+//        {
+//            // Если такой подписчик уже существует, то нужно ввести другое имя
+//            if (it->getName() == name)
+//            {
+//                cout << "\t" << name << " no!" << endl;
+//                isAdd = false;
+//                break;
+//            }
+//        }
 
-        // можем добавить, вызываем сигрнал
-        if (isAdd)
-             addSubscriber(name);
-    }
+//        // можем добавить, вызываем сигрнал
+//        if (isAdd)
+//             addSubscriber(name);
+//    }
 
-    // выход
+//    // выход
 
-}
+//}
 
 
-void FileCheck:: add_shop()
+ void FileCheck:: add_shop()
 {
     QString path;
     bool isAdd = false;
@@ -157,7 +157,7 @@ void FileCheck::connect()
         }
     }
 }
-void FileCheck::list()
+void FileCheck::list()//список файлов
 {
     // Если список журналов не пуст, то выводим их
     if (!shops.isEmpty())
@@ -169,58 +169,58 @@ void FileCheck::list()
         cout << "\tNO shopS!" << endl;
     }
 
-    // Если список подписчиков не пуст, то выводим их
-    if (!subscribers.isEmpty())
-    {
-        this->printSubscribers();
-    }
-    else
-    {
-        cout << "\tNO SUBSCRIBERS!" << endl;
-    }
+//    // Если список подписчиков не пуст, то выводим их
+//    if (!subscribers.isEmpty())
+//    {
+//        this->printSubscribers();
+//    }
+//    else
+//    {
+//        cout << "\tNO SUBSCRIBERS!" << endl;
+//    }
 }
-void FileCheck::size()
-{
-    bool isSize = false;
+//void FileCheck::size()
+//{
+//    bool isSize = false;
 
-    // Если подписчики есть
-    if (!subscribers.isEmpty())
-    {
-        this->printSubscribers();
+//    // Если подписчики есть
+//    if (!subscribers.isEmpty())
+//    {
+//        this->printSubscribers();
 
-        // Блок вывода размера журнала, на который подписан подписчик
-        while (!isSize)
-        {
-            cout << "\tEnter the id of the subscriber from whom you want to find out the size of shop: " << flush;
+//        // Блок вывода размера журнала, на который подписан подписчик
+//        while (!isSize)
+//        {
+//            cout << "\tEnter the id of the subscriber from whom you want to find out the size of shop: " << flush;
 
-            qint32 idSubscriber = cin.readLine().toInt();
+//            qint32 idSubscriber = cin.readLine().toInt();
 
-            // Если ввели верный ID, то выполняем
-            if (idSubscriber >= 0 && idSubscriber < subscribers.size())
-            {
-                // Если подписчик подписан на журнал, то выводим размер журнала, на который он подписан
-                if (subscribers[idSubscriber]->subscribe())
-                {
-                    cout << "\t\tSize is " << QFileInfo(subscribers[idSubscriber]->getshop()).size() << " byte" << endl;
-                    isSize = true;
-                }
-                else
-                {
-                    cout << "\t\tSubscriber has not shop!" << endl;
-                    break;
-                }
-            }
-            else
-            {
-                cout << "\t\tWrong id!" << endl;
-            }
-        }
-    }
-    else
-    {
-        cout << "\tNO SUBSCRIBES!" << endl;
-    }
-}
+//            // Если ввели верный ID, то выполняем
+//            if (idSubscriber >= 0 && idSubscriber < subscribers.size())
+//            {
+//                // Если подписчик подписан на журнал, то выводим размер журнала, на который он подписан
+//                if (subscribers[idSubscriber]->subscribe())
+//                {
+//                    cout << "\t\tSize is " << QFileInfo(subscribers[idSubscriber]->getshop()).size() << " byte" << endl;
+//                    isSize = true;
+//                }
+//                else
+//                {
+//                    cout << "\t\tSubscriber has not shop!" << endl;
+//                    break;
+//                }
+//            }
+//            else
+//            {
+//                cout << "\t\tWrong id!" << endl;
+//            }
+//        }
+//    }
+//    else
+//    {
+//        cout << "\tNO SUBSCRIBES!" << endl;
+//    }
+//}
 void FileCheck::delete_shop()
 {
     // Если список журналов пуст, то переходим на новую итерацию
@@ -351,134 +351,136 @@ void FileCheck::resign()
         }
     }
 }
-void FileCheck::TERMINAL()
-{
+//void FileCheck::TERMINAL()
+//{
 
-   // QFile data("1.txt");
-  //  QTextStream cin(&data);
+//   // QFile data("1.txt");
+//  //  QTextStream cin(&data);
+//QTextStream cin(stdin), cout(stdout);
+//int a=0;
+//    while(a==0)
+//    {
+//       QString command;
+//       bool isCommand = false;
 
-int a=0;
-    while(a==0)
-    {
-       QString command;
-       bool isCommand = false;
+//        // Блок отвечающий за ввод команд
+//        while (!isCommand)
+//        {
+//            // Выводим пользователю приглашение ввести команду ( flush - позволяет очистить буфер, чтобы вывести текст )
+//            // Считываем строкУ
+//           // command="add subscriber";
+//            cout << "Go to command: " << flush;
 
-        // Блок отвечающий за ввод команд
-        while (!isCommand)
-        {
-            // Выводим пользователю приглашение ввести команду ( flush - позволяет очистить буфер, чтобы вывести текст )
-            cout << "Go to command: " << flush;
-            // Считываем строкУ
-           // command="add subscriber";
-            command = cin.readLine();
-            // Ищем в векторе команд введёную с консоли команду, если нашли флаг в true
-            if(std::find(com.begin(), com.end(), command) != com.end())
-            {
-                isCommand = true;
-            }
-            else
-            {
-                isCommand = false;
-            }
+//            command = cin.readLine();
+//            // Ищем в векторе команд введёную с консоли команду, если нашли флаг в true
+//            if(std::find(com.begin(), com.end(), command) != com.end())
+//            {
+//                isCommand = true;
+//            }
+//            else
+//            {
+//                isCommand = false;
+//            }
 
-            // Если мы не нашли команду , то выходим и заново в цикл ожидать команду
-            if (!isCommand && command.isEmpty())
-            {
-                break;
-            }
-        }
+//            // Если мы не нашли команду , то выходим и заново в цикл ожидать команду
+//            if (!isCommand && command.isEmpty())
+//            {
+//                break;
+//            }
+//        }
 
-        // add subscriber
+//        // add subscriber
 
-        if (command == com[0])
-        {
+//        if (command == com[0])
+//        {
 
-        add_subscriber();
-            // выход
-            continue;
-        }
+//        add_subscriber();
+//        //QObject::connect(&com[0], SIGNAL(salaryChanged(int)), SLOT(add_subscriber));
+//            // выход
+//            continue;
+//        }
 
-        // add shop
-        if (command == com[1])
-        {
-            add_shop();
+//        // add shop
+//        if (command == com[1])
+//        {
+//            add_shop();
 
-            continue;
-        }
+//            continue;
+//        }
 
-        // connect
-        if (command == com[2])
-        {
+//        // connect
+//        if (command == com[2])
+//        {
 
-connect();
-            continue;
-        }
+//connect();
+//            continue;
+//        }
 
-        // list
-        if (command == com[3])
-        {
+//        // list
+//        if (command == com[3])
+//        {
 
-list();
-            continue;
-        }
+//list();
+//            continue;
+//        }
 
-        // size
-        if (command == com[4])
-        {
+//        // size
+//        if (command == com[4])
+//        {
 
-size();
-            continue;
-        }
+//size();
+//            continue;
+//        }
 
-        // deleteshop
-        if (command == com[5])
-        {
+//        // deleteshop
+//        if (command == com[5])
+//        {
 
-delete_shop();
-            continue;
-        }
+//delete_shop();
+//            continue;
+//        }
 
-        // delete subscriber
-        if (command == com[6])
-        {
+//        // delete subscriber
+//        if (command == com[6])
+//        {
 
-delete_subscriber();
-            continue;
-        }
+//delete_subscriber();
+//            continue;
+//        }
 
-        // get counter
-        if (command == com[7])
-        {
-            get_counter();
+//        // get counter
+//        if (command == com[7])
+//        {
+//            get_counter();
 
-            continue;
-        }
+//            continue;
+//        }
 
-        // resign ( переподписка )
-        if (command == com[8])
-        {
+//        // resign ( переподписка )
+//        if (command == com[8])
+//        {
 
-resign();
-            continue;
-        }
+//resign();
+//            continue;
+//        }
 
-    }
-}
+//    }
+//}
 
 void FileCheck::addshop(const QString& path)
       {
     if(path!="")
     {
           // Если журнал(путь) существует и он файл
-          if (QFileInfo(path).exists() && QFileInfo(path).isFile())
-          {
+//          if (QFileInfo(path).exists() && QFileInfo(path).isFile())
+//          {
               shops.push_back(new Shop(path));
               QTextStream(stdout) << "\t\tshop " << path << " was added!" << endl;
-          }
-          else
-          {
-              QTextStream(stdout) << "\t\tPath to shop was not added!" << endl;
-          }
+//          }
+//          else
+//          {
+//              QTextStream(stdout) << "\t\tPath to shop was not added!" << endl;
+//          }
       }
 }
 void FileCheck::connect(const qint32& idshop, const qint32& idSubscriber)
@@ -503,21 +505,21 @@ void FileCheck::connect(const qint32& idshop, const qint32& idSubscriber)
         }
     }
     }
-void FileCheck::addSubscriber(const QString& name)
-    {
-    if(name!="")
-    {
-        if (!name.isEmpty())
-        {
-            subscribers.push_back(new Subscriber(name));
-            QTextStream(stdout) << "\t\tSubscriber " << name << " was added!" << endl;
-        }
-        else
-        {
-            QTextStream(stdout) << "\t\tSubscriber was not added!" << endl;
-        }
-    }
-}
+//void FileCheck::addSubscriber(const QString& name)
+//    {
+//    if(name!="")
+//    {
+//        if (!name.isEmpty())
+//        {
+//            subscribers.push_back(new Subscriber(name));
+//            QTextStream(stdout) << "\t\tSubscriber " << name << " was added!" << endl;
+//        }
+//        else
+//        {
+//            QTextStream(stdout) << "\t\tSubscriber was not added!" << endl;
+//        }
+//    }
+//}
 void FileCheck::deleteshop(const qint32& index)
     {
         for (qint32 i = 0; i < shops.size(); ++i)
@@ -640,29 +642,29 @@ FileCheck::FileCheck() :
         "resign",
         })
 {
-    // Связываем сигнал добавления журнала с лямбда-функцией
-    QString path;
-    addshop( path);
 
-const QString name;
-addSubscriber( name);
+//    QString path;
+//    addshop( path);
 
-const qint32& idshop=0;
-const qint32& idSubscriber=0;
-connect(idshop,idSubscriber);
+//const QString name;
+////addSubscriber( name);
 
-const qint32& inde=0;
-deleteshop( inde);
+//const qint32& idshop=0;
+//const qint32& idSubscriber=0;
+//connect(idshop,idSubscriber);
 
-const qint32& index=0;
-deleteSubscriber( index);
+//const qint32& inde=0;
+//deleteshop( inde);
 
-const qint32& index1=0;
-getCounter(index1);
+//const qint32& index=0;
+////deleteSubscriber( index);
 
-const qint32& idSubscriber1=0;
-const qint32& idshop1=0;
-resign( idSubscriber1, idshop1);
+//const qint32& index1=0;
+//getCounter(index1);
+
+//const qint32& idSubscriber1=0;
+//const qint32& idshop1=0;
+//resign( idSubscriber1, idshop1);
 
 
 }

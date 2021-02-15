@@ -17,7 +17,7 @@ public:
     // Функция "взывать". Она возвращает ссылку на единственный объекьт класса FileManager
     static FileCheck& instance();
 void add_subscriber();
-void add_shop();
+ void add_shop();
 void connect();
 void list();
 void size();
@@ -47,15 +47,15 @@ void resign();
     // Сигнал переподписки подписчика
      void resign(const qint32& idSubscriber, const qint32& idshop);
 
-    void TERMINAL();
-
+  //  void TERMINAL();
+QVector<Shop*>		shops;
 private:
     explicit FileCheck();
     void printshop();
     void printSubscribers();
 
     private:
-    QVector<Shop*>		shops;
+
     QVector<Subscriber*>	subscribers;
     QVector<QString>		com;
 };
