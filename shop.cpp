@@ -1,6 +1,6 @@
 #include "shop.h"
 #include "sub.h"
-
+#include<QTextStream>
 Shop::Shop(const QString& name) :
     name(name), counter(0)
 {
@@ -26,4 +26,5 @@ qint32& Shop::getCounter()//кол во
 {
     return counter;
 }
+
 

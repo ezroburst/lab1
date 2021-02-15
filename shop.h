@@ -8,11 +8,12 @@ class Subscriber;
 class Shop : public QObject
 {
     Q_OBJECT
-
+signals:
+    void salaryChanged();
 public:
     // Конструктор принимает имя журнала
     explicit Shop(const QString& name);
-
+void  add_subscriber();
     // Деструктор создаётся по умолчанию компилятором
     ~Shop() = default;
 

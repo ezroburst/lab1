@@ -11,7 +11,7 @@ public:
     // Инициализация имени
     explicit Subscriber(const QString& name);
     ~Subscriber() = default;
-
+/////////////
     QString getName() const;
 
     QString& getshop();
