@@ -14,13 +14,13 @@ public:
 /////////////
     QString getName() const;
 
-    QString& getshop();
+    QString& getDataFile();
 
     // Возвращает флаг, подписан ли подпичик на журнал или нет
     bool& subscribe();
 private:
     QString name;
-    QString shop;
+    QString DataFile;
     bool isSubscribe;
 };
 #endif // SUBSCRIBER__H

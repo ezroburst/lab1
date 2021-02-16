@@ -11,9 +11,9 @@ QString Subscriber::getName() const
     return name;
 }
 
-QString& Subscriber::getshop()
+QString& Subscriber::getDataFile()
 {
-    return shop;
+    return DataFile;
 }
 
 bool& Subscriber::subscribe()
