@@ -5,17 +5,17 @@
 
 class Subscriber;
 
-class Shop : public QObject
+class DataFile : public QObject
 {
     Q_OBJECT
 signals:
     void salaryChanged();
 public:
     // Конструктор принимает имя журнала
-    explicit Shop(const QString& name);
+    explicit DataFile(const QString& name);
 void  add_subscriber();
     // Деструктор создаётся по умолчанию компилятором
-    ~Shop() = default;
+    ~DataFile() = default;
 
     // Возвращает имя журнала
     // const - спецификатор, означающий что функция не изменяет поля класса ( исключения mutable )
