@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 #include "file.h"
-#include "shop.h"
+#include "DataFile.h"
 #include "sub.h"
 #include <QTextStream>
 #include <QFileInfo>
@@ -15,7 +15,7 @@ void resign();
 
 void Sub:: add_subscriber()
 {
-    FileCheck::instance().shops;
+
     QTextStream cin(stdin), cout(stdout);
     QString name;
     bool isAdd = false;//флаг сдежит за разрешением на добавление
@@ -80,7 +80,7 @@ QTextStream cin(stdin), cout(stdout);
         // Блок вывода размера журнала, на который подписан подписчик
         while (!isSize)
         {
-            cout << "\tEnter the id of the subscriber from whom you want to find out the size of shop: " << flush;
+            cout << "\tEnter the id of the subscriber from whom you want to find out the size of DataFile: " << flush;
 
             qint32 idSubscriber = cin.readLine().toInt();
 
@@ -90,12 +90,12 @@ QTextStream cin(stdin), cout(stdout);
                 // Если подписчик подписан на журнал, то выводим размер журнала, на который он подписан
                 if (subscribers[idSubscriber]->subscribe())
                 {
-                    cout << "\t\tSize is " << QFileInfo(subscribers[idSubscriber]->getshop()).size() << " byte" << endl;
+                    cout << "\t\tSize is " << QFileInfo(subscribers[idSubscriber]->getDataFile()).size() << " byte" << endl;
                     isSize = true;
                 }
                 else
                 {
-                    cout << "\t\tSubscriber has not shop!" << endl;
+                    cout << "\t\tSubscriber has not DataFile!" << endl;
                     break;
                 }
             }
@@ -151,17 +151,17 @@ void Sub::delete_subscriber()
                     QTextStream(stdout) << "\t\t" << subscribers[i]->getName() << " was deleted!" << endl;
 
                     // Проходим по списку журналов
-                    for (qint32 iMag = 0; iMag < FileCheck::instance().shops.size(); ++iMag)
+                    for (qint32 iMag = 0; iMag < FileCheck::instance().DataFiles.size(); ++iMag)
                     {
                         // Ищем у каждого журнала нашего подписчика
-                        for (qint32 iSub = 0; iSub < FileCheck::instance().shops[iMag]->getSubscribers().size(); ++iSub)
+                        for (qint32 iSub = 0; iSub < FileCheck::instance().DataFiles[iMag]->getSubscribers().size(); ++iSub)
                         {
                             // Если мы нашли нашего подписчика у журнала, то выполняем
-                            if (subscribers[idSubscriber]->getName() == FileCheck::instance().shops[iMag]->getSubscribers()[iSub]->getName())
+                            if (subscribers[idSubscriber]->getName() == FileCheck::instance().DataFiles[iMag]->getSubscribers()[iSub]->getName())
                             {
                                 // Удаляем у журнала этого подписчика
-                                FileCheck::instance().shops[iMag]->getSubscribers().remove(iSub);
-                                FileCheck::instance().shops[iMag]->getCounter()--;
+                                FileCheck::instance().DataFiles[iMag]->getSubscribers().remove(iSub);
+                                FileCheck::instance().DataFiles[iMag]->getCounter()--;
                             }
                         }
                     }
@@ -185,7 +185,7 @@ void Sub::connect()
   //  this->printshop();
    // this->printSubscribers();
     // Если список журналов пуст, то переходим на новую итерацию
-     if (FileCheck::instance().shops.isEmpty())
+     if (FileCheck::instance().DataFiles.isEmpty())
      {
          cout << "\tNO shopS!" << endl;
          return;
@@ -211,7 +211,7 @@ void Sub::connect()
         idSubscriber = cin.readLine().toInt();
 
         // Если ввели правильные IDs, то выполняем
-        if ((idshop >= 0 && idshop < FileCheck::instance().shops.size()) && (idSubscriber >= 0 && idSubscriber < subscribers.size()))
+        if ((idshop >= 0 && idshop < FileCheck::instance().DataFiles.size()) && (idSubscriber >= 0 && idSubscriber < subscribers.size()))
         {
             // Если подписчик не подписан, то подписываем его на журнал ( чтобы подписчик был подписан только на один журнал )
             if (!subscribers[idSubscriber]->subscribe())
@@ -225,14 +225,14 @@ void Sub::connect()
                         if (!subscribers[idSubscriber]->subscribe())
                         {
                             // Обращаемся к журналу, на который хотим подписаться и добавляем ему подписчика
-                            FileCheck::instance().shops[idshop]->addSubscriber(subscribers[idSubscriber]);
+                            FileCheck::instance().DataFiles[idshop]->addSubscriber(subscribers[idSubscriber]);
                             // Добавляем подписчику журнал
-                            subscribers[idSubscriber]->getshop() = FileCheck::instance().shops[idshop]->getName();
+                            subscribers[idSubscriber]->getDataFile() = FileCheck::instance().DataFiles[idshop]->getName();
 
                             // Выставляем подписчику флаг, что он был подписан
                             subscribers[idSubscriber]->subscribe() = true;
 
-                            QTextStream(stdout) << "\t\t" << FileCheck::instance().shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
+                            QTextStream(stdout) << "\t\t" << FileCheck::instance().DataFiles[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
                         }
                         else
                         {
@@ -244,7 +244,7 @@ void Sub::connect()
             }
             // Если подписчик уже подписан, то говорим об этом
             else
-                cout << "\tSubscriber " << subscribers[idSubscriber]->getName() << " already a subscriber! " << subscribers[idSubscriber]->getshop() << endl;
+                cout << "\tSubscriber " << subscribers[idSubscriber]->getName() << " already a subscriber! " << subscribers[idSubscriber]->getDataFile() << endl;
         }
         else
         {
@@ -261,7 +261,7 @@ void Sub::resign()
         return;
     }
 
-    if (FileCheck::instance().shops.isEmpty())
+    if (FileCheck::instance().DataFiles.isEmpty())
     {
         cout << "\tNO shopS!" << endl;
         return;
@@ -285,7 +285,7 @@ void Sub::resign()
 
             qint32 idshop = cin.readLine().toInt();
 
-            if (idshop >= 0 && idshop < FileCheck::instance().shops.size())
+            if (idshop >= 0 && idshop < FileCheck::instance().DataFiles.size())
             {
                 // Вызываем сигнал переподписки
               //  resign(idSubscriber, idshop);
@@ -303,28 +303,28 @@ void Sub::resign()
                         else
                         {
                             // Проходим по всем журналам
-                            for (qint32 mag = 0; mag < FileCheck::instance().shops.size(); ++mag)
+                            for (qint32 mag = 0; mag < FileCheck::instance().DataFiles.size(); ++mag)
                             {
                                 // Если нашли нужный журнал, то удаляем из подписки этого подписчика
-                                if (FileCheck::instance().shops[mag]->getName() == subscribers[idSubscriber]->getshop())
+                                if (FileCheck::instance().DataFiles[mag]->getName() == subscribers[idSubscriber]->getDataFile())
                                 {
-                                    for (qint32 sub = 0; sub < FileCheck::instance().shops[mag]->getSubscribers().size(); ++sub)
+                                    for (qint32 sub = 0; sub < FileCheck::instance().DataFiles[mag]->getSubscribers().size(); ++sub)
                                     {
-                                        if (FileCheck::instance().shops[mag]->getSubscribers()[sub]->getName() == subscribers[idSubscriber]->getName())
+                                        if (FileCheck::instance().DataFiles[mag]->getSubscribers()[sub]->getName() == subscribers[idSubscriber]->getName())
                                         {
-                                            FileCheck::instance().shops[mag]->getSubscribers().remove(sub);
-                                           FileCheck::instance().shops[mag]->getCounter()--;
+                                            FileCheck::instance().DataFiles[mag]->getSubscribers().remove(sub);
+                                           FileCheck::instance().DataFiles[mag]->getCounter()--;
                                         }
                                     }
                                 }
                             }
 
                             // Здесь подписываем на новый журнал
-                            FileCheck::instance().shops[idshop]->addSubscriber(subscribers[idSubscriber]);
-                            subscribers[idSubscriber]->getshop() = FileCheck::instance().shops[idshop]->getName();
+                            FileCheck::instance().DataFiles[idshop]->addSubscriber(subscribers[idSubscriber]);
+                            subscribers[idSubscriber]->getDataFile() = FileCheck::instance().DataFiles[idshop]->getName();
                             subscribers[idSubscriber]->subscribe() = true;
 
-                            QTextStream(stdout) << "\t\t" << FileCheck::instance().shops[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
+                            QTextStream(stdout) << "\t\t" << FileCheck::instance().DataFiles[idshop]->getName() << " was connect with " << subscribers[idSubscriber]->getName() << endl;
                         }
                     }
                 }
@@ -405,7 +405,7 @@ QVector<Subscriber*>	subscribers;
             if (command == com[1])
             {
                 QString path;
-              FileCheck::instance().add_shop();
+              FileCheck::instance().add_DataFile();
 
 
                 continue;
@@ -438,7 +438,7 @@ FileCheck::instance().list();
             // удаление файлов
             if (command == com[5])
             {
-FileCheck::instance().delete_shop();
+FileCheck::instance().delete_DataFile();
    // delete_shop();
                 continue;
             }
