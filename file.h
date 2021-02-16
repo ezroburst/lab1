@@ -4,7 +4,7 @@
 
 #include <QObject>
 
-class Shop;
+class DataFile;
 class Subscriber;
 
 class FileCheck final : public QObject
@@ -16,18 +16,18 @@ public:
 
     // Функция "взывать". Она возвращает ссылку на единственный объекьт класса FileManager
     static FileCheck& instance();
-void add_subscriber();
- void add_shop();
-void connect();
+
+ void add_DataFile();
+
 void list();
-void size();
-void delete_shop();
-void delete_subscriber();
+
+void delete_DataFile();
+
 void get_counter();
-void resign();
+
 
     // Сигнал добавления журнала
-    void addshop(const QString& path);
+    void addDataFile(const QString& path);
 
     // Сигнал добавления подписчика
      void addSubscriber(const QString& name);
@@ -36,7 +36,7 @@ void resign();
     void connect(const qint32& idshop, const qint32& idSubscriber);
 
     // Сигнал удаления журнала
-     void deleteshop(const qint32& index);
+     void deleteDataFile(const qint32& index);
 
     // Сигнал удаления подписчика
     void deleteSubscriber(const qint32& index);
@@ -48,10 +48,10 @@ void resign();
      void resign(const qint32& idSubscriber, const qint32& idshop);
 
   //  void TERMINAL();
-QVector<Shop*>		shops;
+QVector<DataFile*>		DataFiles;
 private:
     explicit FileCheck();
-    void printshop();
+    void printDataFile();
     void printSubscribers();
 
     private:
